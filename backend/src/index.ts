@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import generate from "./helper";
+import {generate, uploadFolderS3} from "./helper";
 import simpleGit from "simple-git";
 
 const app = express();
@@ -25,6 +25,12 @@ app.get("/repo", async (req: Request, res: Response) => {
   } catch (err) {
     console.log('error: ', err);
     return res.status(500).json({error: "clone failed"})
+  }
+  try {
+    await uploadFolderS3(`cloned_repo/${idd}`, `${idd}`);
+  } catch (err) {
+    console.log('error: ', err);
+    return res.status(500).json({error: "folder upload failed"})
   }
   
   res.send({"repoUrl": repoUrl, "idd": idd});
