@@ -67,7 +67,7 @@ const uploadFileS3 = async (filePath: string, filename: string) => {
     try {
         const command = new PutObjectCommand(fileParams);
         const response = await s3client.send(command);
-        // console.log('file uploaded: ', response);
+        console.log('file uploaded: ', response);
     } catch (err) {
         console.log('error: ', err);
         throw err;
