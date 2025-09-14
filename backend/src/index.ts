@@ -22,6 +22,8 @@ app.get("/repo", async (req: Request, res: Response) => {
 
   let idd = generate()
 
+  redis.set(`statu:${idd}`, "cloning");
+
   try {
     await git.clone(repoUrl, `cloned_repo/${idd}`);
   } catch (err) {
@@ -30,14 +32,17 @@ app.get("/repo", async (req: Request, res: Response) => {
   }
 
   try {
-    await uploadFolderS3(`cloned_repo/${idd}`, `${idd}`);
+    await uploadFolderS3(`cloned_repo/${idd}`, `${idd}`)
+    await redis.set(`status:${idd}`, "uploaded")
   } catch (err) {
+    await redis.set(`status:${idd}`, "failed")
     console.log('error: ', err);
     return res.status(500).json({error: "folder upload failed"})
   }
   
-  try {await pushToQueue("my-queue", idd)}
-  catch (err) {
+  try {
+    await pushToQueue("my-queue", idd)
+  } catch (err) {
     console.log("error in /repo", err);
     throw err;
   }
@@ -56,9 +61,10 @@ const pushToQueue = async (queuename: string, idd: string) => {
   }
 }
 
-app.get('/repo/status', (req: Request, res: Response) => {
-  const status = "no" //status logic
-  res.send({"upload_status": status})
+app.get('/repo/status', async (req: Request, res: Response) => {
+  const { repoId } = req.body;
+  const status = await redis.get(`status:${repoId}`) || "not_found";
+  res.send({"upload_status": status, "repo_id": repoId})
 })
 
 app.listen(PORT, () => {
