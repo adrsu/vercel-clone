@@ -4,3 +4,4 @@ backend/.env
 backend/cloned_repo/
 frontend/node_modules
 frontend/dist
+frontend/.env
