@@ -2,11 +2,12 @@ import { S3Client, ListObjectsV2Command, GetObjectCommand } from '@aws-sdk/clien
 import { pipeline } from 'stream/promises';
 import { mkdir } from 'fs/promises';
 import { Readable } from 'stream';
+import { execa } from 'execa';
+import { stdout } from 'process';
 
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
-const url = require('url');
 
 dotenv.config();
 
@@ -55,6 +56,19 @@ const buildUploadToS3 = async (bucketName: string) => {
   const projectRoot = process.cwd();
   const repoPath = path.join(projectRoot, 'dist', 'downloads', bucketName);
   console.log("repo path", repoPath);
+
+  await execa('npm', ['install'], {
+    cwd: repoPath,
+    stdout: 'inherit'
+  })
+
+  await execa('npm', ['run', 'build'], {
+    cwd: repoPath,
+    stdout: 'inherit'
+  })
+
+  
+
 }
 
 export {downloadDirectoryWithStreaming, buildUploadToS3};
