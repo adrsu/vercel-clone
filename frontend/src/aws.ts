@@ -6,6 +6,7 @@ import { Readable } from 'stream';
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
+const url = require('url');
 
 dotenv.config();
 
@@ -48,4 +49,12 @@ const downloadDirectoryWithStreaming = async (bucketName: string, prefix: string
   }
 }
 
-export {downloadDirectoryWithStreaming};
+const buildUploadToS3 = async (bucketName: string) => {
+  console.log("pathhh", path.resolve('.'))
+
+  const projectRoot = process.cwd();
+  const repoPath = path.join(projectRoot, 'dist', 'downloads', bucketName);
+  console.log("repo path", repoPath);
+}
+
+export {downloadDirectoryWithStreaming, buildUploadToS3};
