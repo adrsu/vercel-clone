@@ -3,7 +3,7 @@ import { pipeline } from 'stream/promises';
 import { mkdir } from 'fs/promises';
 import { Readable } from 'stream';
 import { execa } from 'execa';
-import { stdout } from 'process';
+import { uploadFolderS3 } from './helper';
 
 const fs = require('fs');
 const path = require('path');
@@ -67,7 +67,7 @@ const buildUploadToS3 = async (bucketName: string) => {
     stdout: 'inherit'
   })
 
-  
+  await uploadFolderS3(`dist/downloads/${bucketName}/dist`, `${bucketName}/dist`);
 
 }
 
