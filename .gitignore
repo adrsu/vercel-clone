@@ -11,3 +11,6 @@ deploy-service/.env
 request-handler/node_modules
 request-handler/dist
 request-handler/.env
+
+frontend/node_modules
+frontend/dist
