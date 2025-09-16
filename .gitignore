@@ -1,11 +1,13 @@
 
-backend/node_modules
-backend/.env
-backend/cloned_repo/
-backend/dist
-frontend/node_modules
-frontend/dist
-frontend/.env
+upload-service/node_modules
+upload-service/.env
+upload-service/cloned_repo/
+upload-service/dist
+
+deploy-service/node_modules
+deploy-service/dist
+deploy-service/.env
+
 request-handler/node_modules
 request-handler/dist
 request-handler/.env
