@@ -66,3 +66,4 @@ app.listen(PORT, () => {
 
 
 // Start-Process notepad "C:\Windows\System32\drivers\etc\hosts" -Verb RunAs
+// docker exec -it redis redis-cli
