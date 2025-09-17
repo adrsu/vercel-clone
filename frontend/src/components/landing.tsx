@@ -37,15 +37,20 @@ export function Landing() {
             </div>
             <Button onClick={async () => {
               setUploading(true);
-              const res = await axios.post(`${BACKEND_UPLOAD_URL}/deploy`, {
+              const res = await axios.post(`${BACKEND_UPLOAD_URL}/repo`, {
                 repoUrl: repoUrl
               });
-              setUploadId(res.data.id);
+
+              console.log("repo id: ", res.data.idd)
+              setUploadId(res.data.idd);
               setUploading(false);
               const interval = setInterval(async () => {
-                const response = await axios.get(`${BACKEND_UPLOAD_URL}/status?id=${res.data.id}`);
+                const response = await axios.post(`${BACKEND_UPLOAD_URL}/repo/status`, {
+                  repoId: res.data.idd
+                });
 
-                if (response.data.status === "deployed") {
+                console.log("response status", response.data.upload_status)
+                if (response.data.upload_status === "processed") {
                   clearInterval(interval);
                   setDeployed(true);
                 }
@@ -64,11 +69,11 @@ export function Landing() {
         <CardContent>
           <div className="space-y-2">
             <Label htmlFor="deployed-url">Deployed URL</Label>
-            <Input id="deployed-url" readOnly type="url" value={`http://${uploadId}.dev.100xdevs.com:3001/index.html`} />
+            <Input id="deployed-url" readOnly type="url" value={`http://${uploadId}.localhost:3001/index.html`} />
           </div>
           <br />
           <Button className="w-full" variant="outline">
-            <a href={`http://${uploadId}.10kdevs.com/index.html`} target="_blank">
+            <a href={`http://${uploadId}.localhost:3001/index.html`} target="_blank">
               Visit Website
             </a>
           </Button>

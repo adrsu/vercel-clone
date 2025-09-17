@@ -12,7 +12,7 @@ const redis = new Redis();
 app.use(cors());
 app.use(express.json());
 
-app.get("/repo", async (req: Request, res: Response) => {
+app.post("/repo", async (req: Request, res: Response) => {
   const { repoUrl } = req.body;
 
   if (!repoUrl) {
@@ -61,8 +61,9 @@ const pushToQueue = async (queuename: string, idd: string) => {
   }
 }
 
-app.get('/repo/status', async (req: Request, res: Response) => {
+app.post('/repo/status', async (req: Request, res: Response) => {
   const { repoId } = req.body;
+  console.log("repoId: ", repoId)
   const status = await redis.get(`status:${repoId}`) || "not_found";
   res.send({"upload_status": status, "repo_id": repoId})
 })

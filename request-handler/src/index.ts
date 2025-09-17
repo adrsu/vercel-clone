@@ -34,7 +34,7 @@ const handleS3Request = async (req: Request, res: Response, requestedPath: strin
     
     const content = await getResponse.Body?.transformToString();
     
-    const contentType = requestedPath.endsWith('html')? 'text/html': requestedPath.endsWith('css')? 'text/css': requestedPath.endsWith('js')? 'application/javascript': 'text/plain';
+    const contentType = requestedPath.endsWith('html')? 'text/html': requestedPath.endsWith('css')? 'text/css': requestedPath.endsWith('js')? 'application/javascript': requestedPath.endsWith('svg')? 'image/svg+xml': 'text/plain';
     res.set('Content-Type', contentType);
     
     res.send(content);
